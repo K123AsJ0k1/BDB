@@ -20,7 +20,7 @@ jobs:
           files: "./Data/TextList.json"
       - name: Files exist
         if: steps.check_files.outputs.files_exists == 'true'
-        run: rm "./data/TextList.json"
+        run: rm "./Data/TextList.json"
       - name: Create text list
         run: bash listTexts.bash
         working-directory: './Bash'
