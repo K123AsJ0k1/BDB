@@ -6,12 +6,27 @@ on:
       - main
 
 jobs:
-  hello_world_job:
+  data_creation:
     runs-on: ubuntu-20.04
     steps:
-      - name: Say Hello
-        run: |
-          echo "Hello World!"
-      - name: Now it is
-        run: |
-          date
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - name: Check data files
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./data/TextList.json"
+      - name: Files exist
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: rm "./data/TextList.json"
+      - name: Create text list
+        run: bash listTexts.bash
+        working-directory: './Bash'
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: "Data update"
+      
